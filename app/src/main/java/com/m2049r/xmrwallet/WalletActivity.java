@@ -150,30 +150,30 @@ public class WalletActivity extends AppCompatActivity implements WalletFragment.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_info:
-                onWalletDetails();
-                return true;
-            case R.id.action_donate:
-                DonationFragment.display(getSupportFragmentManager());
-                return true;
-            case R.id.action_share:
-                onShareTxInfo();
-                return true;
-            case R.id.action_help_tx_info:
-                HelpFragment.display(getSupportFragmentManager(), R.string.help_tx_details);
-                return true;
-            case R.id.action_help_wallet:
-                HelpFragment.display(getSupportFragmentManager(), R.string.help_wallet);
-                return true;
-            case R.id.action_details_help:
-                HelpFragment.display(getSupportFragmentManager(), R.string.help_details);
-                return true;
-            case R.id.action_help_send:
-                HelpFragment.display(getSupportFragmentManager(), R.string.help_send);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int i = item.getItemId();
+        if (i == R.id.action_info) {
+            onWalletDetails();
+            return true;
+        } else if (i == R.id.action_donate) {
+            DonationFragment.display(getSupportFragmentManager());
+            return true;
+        } else if (i == R.id.action_share) {
+            onShareTxInfo();
+            return true;
+        } else if (i == R.id.action_help_tx_info) {
+            HelpFragment.display(getSupportFragmentManager(), R.string.help_tx_details);
+            return true;
+        } else if (i == R.id.action_help_wallet) {
+            HelpFragment.display(getSupportFragmentManager(), R.string.help_wallet);
+            return true;
+        } else if (i == R.id.action_details_help) {
+            HelpFragment.display(getSupportFragmentManager(), R.string.help_details);
+            return true;
+        } else if (i == R.id.action_help_send) {
+            HelpFragment.display(getSupportFragmentManager(), R.string.help_send);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 

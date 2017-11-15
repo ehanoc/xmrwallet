@@ -1052,41 +1052,41 @@ public class LoginActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_create_help_new:
-                HelpFragment.display(getSupportFragmentManager(), R.string.help_create_new);
-                return true;
-            case R.id.action_create_help_keys:
-                HelpFragment.display(getSupportFragmentManager(), R.string.help_create_keys);
-                return true;
-            case R.id.action_create_help_view:
-                HelpFragment.display(getSupportFragmentManager(), R.string.help_create_view);
-                return true;
-            case R.id.action_create_help_seed:
-                HelpFragment.display(getSupportFragmentManager(), R.string.help_create_seed);
-                return true;
-            case R.id.action_details_help:
-                HelpFragment.display(getSupportFragmentManager(), R.string.help_details);
-                return true;
-            case R.id.action_license_info:
-                AboutFragment.display(getSupportFragmentManager());
-                return true;
-            case R.id.action_help_list:
-                HelpFragment.display(getSupportFragmentManager(), R.string.help_list);
-                return true;
-            case R.id.action_privacy_policy:
-                PrivacyFragment.display(getSupportFragmentManager());
-                return true;
-            case R.id.action_testnet:
-                try {
-                    LoginFragment loginFragment = (LoginFragment)
-                            getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                    item.setChecked(loginFragment.onTestnetMenuItem());
-                } catch (ClassCastException ex) {
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int i = item.getItemId();
+        if (i == R.id.action_create_help_new) {
+            HelpFragment.display(getSupportFragmentManager(), R.string.help_create_new);
+            return true;
+        } else if (i == R.id.action_create_help_keys) {
+            HelpFragment.display(getSupportFragmentManager(), R.string.help_create_keys);
+            return true;
+        } else if (i == R.id.action_create_help_view) {
+            HelpFragment.display(getSupportFragmentManager(), R.string.help_create_view);
+            return true;
+        } else if (i == R.id.action_create_help_seed) {
+            HelpFragment.display(getSupportFragmentManager(), R.string.help_create_seed);
+            return true;
+        } else if (i == R.id.action_details_help) {
+            HelpFragment.display(getSupportFragmentManager(), R.string.help_details);
+            return true;
+        } else if (i == R.id.action_license_info) {
+            AboutFragment.display(getSupportFragmentManager());
+            return true;
+        } else if (i == R.id.action_help_list) {
+            HelpFragment.display(getSupportFragmentManager(), R.string.help_list);
+            return true;
+        } else if (i == R.id.action_privacy_policy) {
+            PrivacyFragment.display(getSupportFragmentManager());
+            return true;
+        } else if (i == R.id.action_testnet) {
+            try {
+                LoginFragment loginFragment = (LoginFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                item.setChecked(loginFragment.onTestnetMenuItem());
+            } catch (ClassCastException ex) {
+            }
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 

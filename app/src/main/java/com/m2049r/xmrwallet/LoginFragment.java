@@ -231,24 +231,24 @@ public class LoginFragment extends Fragment implements WalletInfoAdapter.OnInter
 
     @Override
     public boolean onContextInteraction(MenuItem item, WalletManager.WalletInfo listItem) {
-        switch (item.getItemId()) {
-            case R.id.action_info:
-                showInfo(listItem.name);
-                break;
-            case R.id.action_receive:
-                showReceive(listItem.name);
-                break;
-            case R.id.action_rename:
-                activityCallback.onWalletRename(listItem.name);
-                break;
-            case R.id.action_backup:
-                activityCallback.onWalletBackup(listItem.name);
-                break;
-            case R.id.action_archive:
-                activityCallback.onWalletArchive(listItem.name);
-                break;
-            default:
-                return super.onContextItemSelected(item);
+        int i = item.getItemId();
+        if (i == R.id.action_info) {
+            showInfo(listItem.name);
+
+        } else if (i == R.id.action_receive) {
+            showReceive(listItem.name);
+
+        } else if (i == R.id.action_rename) {
+            activityCallback.onWalletRename(listItem.name);
+
+        } else if (i == R.id.action_backup) {
+            activityCallback.onWalletBackup(listItem.name);
+
+        } else if (i == R.id.action_archive) {
+            activityCallback.onWalletArchive(listItem.name);
+
+        } else {
+            return super.onContextItemSelected(item);
         }
         return true;
     }
@@ -441,30 +441,29 @@ public class LoginFragment extends Fragment implements WalletInfoAdapter.OnInter
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        switch (id) {
-            case R.id.fab:
-                animateFAB();
-                break;
-            case R.id.fabNew:
-                fabScreen.setVisibility(View.INVISIBLE);
-                isFabOpen = false;
-                activityCallback.onAddWallet(isTestnet(), GenerateFragment.TYPE_NEW);
-                break;
-            case R.id.fabView:
-                animateFAB();
-                activityCallback.onAddWallet(isTestnet(), GenerateFragment.TYPE_VIEWONLY);
-                break;
-            case R.id.fabKey:
-                animateFAB();
-                activityCallback.onAddWallet(isTestnet(), GenerateFragment.TYPE_KEY);
-                break;
-            case R.id.fabSeed:
-                animateFAB();
-                activityCallback.onAddWallet(isTestnet(), GenerateFragment.TYPE_SEED);
-                break;
-            case R.id.fabScreen:
-                animateFAB();
-                break;
+        if (id == R.id.fab) {
+            animateFAB();
+
+        } else if (id == R.id.fabNew) {
+            fabScreen.setVisibility(View.INVISIBLE);
+            isFabOpen = false;
+            activityCallback.onAddWallet(isTestnet(), GenerateFragment.TYPE_NEW);
+
+        } else if (id == R.id.fabView) {
+            animateFAB();
+            activityCallback.onAddWallet(isTestnet(), GenerateFragment.TYPE_VIEWONLY);
+
+        } else if (id == R.id.fabKey) {
+            animateFAB();
+            activityCallback.onAddWallet(isTestnet(), GenerateFragment.TYPE_KEY);
+
+        } else if (id == R.id.fabSeed) {
+            animateFAB();
+            activityCallback.onAddWallet(isTestnet(), GenerateFragment.TYPE_SEED);
+
+        } else if (id == R.id.fabScreen) {
+            animateFAB();
+
         }
     }
 }

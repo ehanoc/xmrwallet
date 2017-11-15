@@ -34,7 +34,7 @@ public class Wallet {
     private long handle = 0;
     private long listenerHandle = 0;
 
-    Wallet(long handle) {
+    public Wallet(long handle) {
         this.handle = handle;
     }
 
