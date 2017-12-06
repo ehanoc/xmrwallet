@@ -19,6 +19,11 @@ package com.m2049r.xmrwallet;
 
 import android.app.Application;
 
+import com.m2049r.xmrwallet.util.Helper;
+
+import java.io.File;
+import java.io.IOException;
+
 import timber.log.Timber;
 
 public class XmrWalletApplication extends Application {
@@ -28,6 +33,18 @@ public class XmrWalletApplication extends Application {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
+        }
+
+        // TODO :: TO BE REMOVED AFTER A SUCESSFULL MIGRATION OF PREVIOUS FILES TO INTERNAL STORAGE
+        File oldExternalFolder = Helper.getStorageRoot(this);
+        if (oldExternalFolder.exists()) {
+            try {
+                Helper.moveFilesToInternal(this);
+                boolean isDeleted = oldExternalFolder.delete();
+                Timber.i("old external folder was deleted : %s ", isDeleted);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

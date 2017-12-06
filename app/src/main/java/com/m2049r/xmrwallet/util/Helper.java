@@ -40,8 +40,12 @@ import com.m2049r.xmrwallet.R;
 import com.m2049r.xmrwallet.model.Wallet;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
@@ -52,10 +56,111 @@ import javax.net.ssl.HttpsURLConnection;
 import timber.log.Timber;
 
 public class Helper {
+    static private int FILES_BUFFER_SIZE = 1024;
+
     static private final String WALLET_DIR = "monerujo";
 
     static public int DISPLAY_DIGITS_INFO = 5;
 
+    /**
+     *
+     * @param context
+     */
+    static public void moveFilesToInternal(Context context) throws IOException {
+        Timber.i("Helper::moveFilesToInternal()");
+
+        File appDir = context.getFilesDir();
+
+        // internal storage
+        File newMonerujoDir = new File(appDir, WALLET_DIR);
+        if (!newMonerujoDir.exists()) {
+            boolean res = newMonerujoDir.mkdir();
+            Timber.i("Helper::moveFilesToInternal(), created internal monerujo folder : %s", res);
+        }
+
+
+        File prevFolder = getStorageRoot(context);
+        File[] externalOldFiles = prevFolder.listFiles();
+
+        writeFilesToFolder(newMonerujoDir, externalOldFiles);
+
+        //cleanup old folder
+        boolean isDeleted = prevFolder.delete();
+        Timber.i("Helper::moveFilesToInternal() Is old monerujo folder deleted : %s", isDeleted);
+    }
+
+    /**
+     *
+     * @param folder - folder to copy files into
+     * @param files - files to write
+     */
+    static private void writeFilesToFolder(File folder, File[] files) throws IOException {
+        for (File f : files) {
+
+            // found a folder, create founder & copy it's inner files
+            // recursive call
+            if (f.isDirectory()) {
+                File innerDir = new File(folder, f.getName());
+                boolean isCreated = innerDir.mkdir();
+                Timber.i("Helper::writeFilesToFolder() Inner dir created : %s", isCreated);
+                if (isCreated) {
+                    writeFilesToFolder(innerDir, f.listFiles());
+                }
+
+                // skip to next item
+                continue;
+            }
+
+            // newFile to be written
+            File newFile = new File(folder, f.getName());
+
+            // Stream of old file
+            InputStream in = new FileInputStream(f);
+
+            // new file
+            OutputStream out = new FileOutputStream(newFile);
+
+            // Copy bits
+            byte[] buf = new byte[FILES_BUFFER_SIZE];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+
+            in.close();
+            out.close();
+
+            Timber.i("Helper::writeFilesToFolder() File copied : %s", newFile.getName());
+
+            //clean up old file
+            boolean isDeleted = f.delete();
+            Timber.i("Helper::writeFilesToFolder() Older file : %s , was deleted : %s", f.getName(), isDeleted);
+        }
+    }
+
+    /**
+     *
+     * @param context
+     * @return
+     */
+    static public File getWalletDir(Context context) {
+        File walletDir = new File(context.getFilesDir(), WALLET_DIR);
+
+        if (!walletDir.isDirectory()) {
+            String msg = "Directory " + walletDir.getAbsolutePath() + " does not exist.";
+            Timber.e(msg);
+            throw new IllegalStateException(msg);
+        }
+
+        return walletDir;
+    }
+
+    /**
+     *
+     * @param context
+     * @return
+     * @deprecated - to be removed with permissions
+     */
     static public File getStorageRoot(Context context) {
         if (!isExternalStorageWritable()) {
             String msg = context.getString(R.string.message_strorage_not_writable);
@@ -112,7 +217,7 @@ public class Helper {
     }
 
     static public File getWalletFile(Context context, String aWalletName) {
-        File walletDir = getStorageRoot(context);
+        File walletDir = getWalletDir(context);
         File f = new File(walletDir, aWalletName);
         Timber.d("wallet= %s size= %d", f.getAbsolutePath(), f.length());
         return f;

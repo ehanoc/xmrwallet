@@ -537,7 +537,7 @@ public class LoginActivity extends SecureActivity
     }
 
     private boolean checkWalletPassword(String walletName, String password) {
-        String walletPath = new File(Helper.getStorageRoot(getApplicationContext()),
+        String walletPath = new File(Helper.getWalletDir(getApplicationContext()),
                 walletName + ".keys").getAbsolutePath();
         // only test view key
         return WalletManager.getInstance().verifyWalletPassword(walletPath, password, true);
@@ -566,7 +566,7 @@ public class LoginActivity extends SecureActivity
 
     @Override
     public File getStorageRoot() {
-        return Helper.getStorageRoot(getApplicationContext());
+        return Helper.getWalletDir(getApplicationContext());
     }
 
     ////////////////////////////////////////

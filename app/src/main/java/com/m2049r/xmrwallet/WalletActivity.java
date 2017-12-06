@@ -833,7 +833,7 @@ public class WalletActivity extends SecureActivity implements WalletFragment.Lis
 
     @Override
     public boolean verifyWalletPassword(String password) {
-        String walletPath = new File(Helper.getStorageRoot(this),
+        String walletPath = new File(Helper.getWalletDir(this),
                 getWalletName() + ".keys").getAbsolutePath();
         return WalletManager.getInstance().verifyWalletPassword(walletPath, password, true);
     }
